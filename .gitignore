@@ -1,0 +1,24 @@
+# Ignore OS-specific files
+.DS_Store
+Thumbs.db
+
+
+# PHP cache files
+*.log
+*.cache
+
+
+# Environment configuration
+.env
+
+# IDE/editor folders
+.vscode/
+.idea/
+
+# Mac/Unix hidden files
+._*
+
+# Backup files
+*~
+*.bak
+*.tmp
