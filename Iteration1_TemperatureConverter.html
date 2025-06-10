@@ -1,0 +1,143 @@
+<html>
+<head>
+  <title>Temperature Converter - Iteration 1: Convert between Celsius and Fahrenheit</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f2f2f2;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    /* Container for the converter box */
+    .container {
+      background: white;
+      padding: 30px 40px;
+      border-radius: 10px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      max-width: 400px;
+      width: 100%;
+    }
+
+    /* Heading style */
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    
+    /* Label style */
+    label {
+      display: block;
+      margin: 10px 0 5px;
+      font-weight: bold;
+    }
+
+    /* Input, select, and button styles */
+    input, select, button {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      margin-bottom: 15px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+    
+    /* Button style */
+    button {
+      background-color: #007BFF; 
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    /* Hover effect for button */
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    /* Style for displaying the result */
+    .result {
+      text-align: center;
+      font-weight: bold;
+      color: #333;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Converter container -->
+  <div class="container">
+    <h2>Temperature Converter</h2>
+
+    <!-- Input for temperature -->
+    <label for="tempInput">Enter Temperature:</label>
+    <input type="number" id="tempInput" placeholder="e.g., 25">
+
+
+    <!-- From unit selection-->
+    <label for="unitSelect">Convert from:</label>
+    <select id="unitSelect">
+      <option value="C">Celsius (°C)</option>
+      <option value="F">Fahrenheit (°F)</option>
+    </select>
+
+    <!-- To unit selection -->
+    <label for="toUnit">Convert to:</label>
+    <select id="toUnit">
+      <option value="F">Fahrenheit (°F)</option>
+      <option value="C">Celsius (°C)</option>
+    </select>
+    
+    <!-- Convert button -->
+    <button onclick="convert()">Convert</button>
+
+    <!-- Result will be displayed here -->
+    <div class="result" id="result"></div>
+  </div>
+
+  <!-- JavaScript to handle conversion logic -->
+  <script>
+
+    // Function to perform temperature conversion
+    function convert() {
+
+    // Get the input value and units
+      const temp = parseFloat(document.getElementById("tempInput").value);
+      const from = document.getElementById("unitSelect").value;
+      const to = document.getElementById("toUnit").value;
+      const resultDiv = document.getElementById("result");
+      
+      // Validate the input
+      if (isNaN(temp)) {
+        resultDiv.textContent = "❗ Please enter a valid number.";
+        return;
+      }
+
+     // If both units are the same, no conversion
+      if (from === to) {
+        resultDiv.textContent = `${temp.toFixed(2)}°${from} = ${temp.toFixed(2)}°${to}`;
+        return;
+      }
+
+      let converted;
+
+     // Perform conversion based on selected units
+      if (from === "C" && to === "F") {
+        converted = (temp * 9 / 5) + 32;
+      } else if (from === "F" && to === "C") {
+        converted = (temp - 32) * 5 / 9;
+      }
+
+      // Display the result with 2 decimal places
+      resultDiv.textContent = `${temp}°${from} = ${converted.toFixed(2)}°${to}`;
+    }
+  </script>
+
+</body>
+</html>
