@@ -1,0 +1,378 @@
+<html>
+<head>
+
+  <title>Temperature Converter - Iteration 3: Live conversion, dark-mode-toggle and conversion history</title>
+  <style>
+
+    /* Body style */
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to bottom, #aee1f9, #c8e6f9);
+      margin: 0;
+      padding: 0;
+      display: flex;
+      height: 100vh;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.3s ease;
+    }
+    
+    /* Container box style */
+    .container {
+      background-color: white;
+      padding: 30px 25px;
+      border-radius: 20px;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+      position: relative;
+      width: 90%;
+      max-width: 500px;
+      text-align: center;
+      transition: background-color 0.3s ease;
+    }
+
+    /* Main heading style */
+    h1 {
+      margin-bottom: 20px;
+      color: teal;
+      font-weight: 700;
+    }
+
+    /* Label style */
+    label {
+      display: block;
+      margin: 15px 0 5px;
+      text-align: left;
+      font-weight: 600;
+    }
+
+    /* Styling for input fields and dropdown selects */
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 5px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+      box-sizing: border-box;
+      transition: background-color 0.3s, border-color 0.3s, color 0.3s;
+    }
+
+    /* Show red border and light red background for invalid input */
+    input:invalid,
+    .dark-mode input:invalid {
+    border: 2px solid red !important;
+    background-color: #ffe5e5 !important;
+    color: #000 !important;
+    }
+
+    /* Button container with spacing */
+    .button-group {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    /* Buttons for swap and reset */
+    .button-group button {
+      padding: 8px 14px;
+      border: none;
+      background-color: #007B8A;
+      color: white;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    /* Button hover effect */
+    .button-group button:hover {
+      background-color: #005f6a;
+    }
+
+    /* Display area for converted result */
+    .result-message {
+      margin-top: 20px;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: teal;
+      background: #f0f8ff;
+      padding: 10px;
+      border-radius: 12px;
+      min-height: 1.4em;
+    }
+
+    /* History section container */
+    .history {
+      text-align: left;
+      margin-top: 20px;
+    }
+
+    /* History heading */
+    .history h3 {
+      margin-bottom: 10px;
+      color: #444;
+    }
+
+    /* History list style */
+    .history ul {
+      list-style: none;
+      padding-left: 0;
+      font-size: 0.95rem;
+      max-height: 150px;
+      overflow-y: auto;
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      background: #fafafa;
+    }
+
+    /* Each history item styling */
+    .history li {
+      padding: 8px 12px;
+      border-bottom: 1px solid #ddd;
+      cursor: default;
+      transition: background-color 0.2s;
+    }
+
+    /* Remove border from last history item */
+    .history li:last-child {
+      border-bottom: none;
+    }
+
+    /* Hover effect for history items */
+    .history li:hover {
+      background-color: #e0f0f8;
+    }
+
+   
+    /* Dark mode toggle button positioning and styling */
+    .dark-mode-toggle {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      padding: 6px 10px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      background-color: #007B8A;
+      color: white;
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      font-size: 1.1rem;
+      transition: background-color 0.3s ease;
+    }
+
+    /* Dark mode styles for body and container */
+    .dark-mode {
+      background: #1e1e1e;
+      color: #f0f0f0;
+    }
+
+    .dark-mode .container {
+      background-color: #2e2e2e;
+    }
+    
+    /* Inputs and selects in dark mode */
+    .dark-mode input,
+    .dark-mode select {
+      background-color: #444;
+      color: #fff;
+      border: 1px solid #666;
+    }
+
+    /* Result message in dark mode */
+    .dark-mode .result-message {
+      color: #90ee90;
+      background: #2a2a2a;
+    }
+
+    /* History heading in dark mode */
+    .dark-mode .history h3 {
+      color: #ccc;
+    }
+
+    /* History list in dark mode */
+    .dark-mode .history ul {
+      background: #3a3a3a;
+      border-color: #555;
+    }
+
+    /* History list items in dark mode */
+    .dark-mode .history li {
+      border-color: #555;
+    }
+
+    /* Hover effect on history items in dark mode */
+    .dark-mode .history li:hover {
+      background-color: #446644;
+    }
+
+    /* Dark mode toggle button colors */
+    .dark-mode .dark-mode-toggle {
+      background-color: #007B8A;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Dark mode toggle button -->
+    <button class="dark-mode-toggle" onclick="toggleDarkMode()">🌙</button>
+    
+    <!-- Main heading -->
+    <h1>Temperature Converter</h1>
+
+    <!-- Temperature input -->
+    <label for="temperature">Temperature</label>
+    <input type="number" id="temperature" placeholder="Enter temperature" aria-label="Temperature" />
+      
+    <!-- From unit selection -->
+    <label for="from">From</label>
+    <select id="from" aria-label="From Unit">
+      <option value="fahrenheit">Fahrenheit (°F)</option>
+      <option value="celsius" selected>Celsius (°C)</option>
+      <option value="kelvin">Kelvin (K)</option>
+    </select>
+
+    <!-- To unit selection -->
+    <label for="to">To</label>
+    <select id="to" aria-label="To Unit">
+      <option value="celsius">Celsius (°C)</option>
+      <option value="fahrenheit">Fahrenheit (°F)</option>
+      <option value="kelvin" selected>Kelvin (K)</option>
+    </select>
+
+    <!-- Swap buttons and reset buttons -->
+    <div class="button-group">
+      <button onclick="swapValues()">Swap</button>
+      <button onclick="resetFields()">Reset</button>
+    </div>
+
+    <!-- Result will be displayed here -->
+    <p id="result" class="result-message"></p>
+    
+    <!-- Display conversion history -->
+    <div id="history" class="history">
+      <h3>Conversion History</h3>
+      <ul id="historyList"></ul>
+    </div>
+  </div>
+
+  <script>
+    // Store the last 5 conversions
+    const historyList = [];
+    
+    // Debounce timeout id for delayed input processing
+    let debounceTimeout;
+        
+    // Debounced function to delay conversion while user is typing
+    function convertTemperatureDebounced() {
+      clearTimeout(debounceTimeout);
+      debounceTimeout = setTimeout(convertTemperature, 500); // Delay 500ms before converting
+    }
+
+    // Converts temperature based on selected units and updates result and history
+    function convertTemperature() {
+      const tempInput = document.getElementById("temperature");
+      const from = document.getElementById("from").value;
+      const to = document.getElementById("to").value;
+      const result = document.getElementById("result");
+      const historyEl = document.getElementById("historyList");
+
+      let tempStr = tempInput.value.trim();
+      
+      // Handle empty input
+      if (tempStr === "") {
+        result.textContent = "Please enter a temperature.";
+        result.style.color = "gray";
+        return;
+      }
+
+      // Convert string to float
+      let temp = parseFloat(tempStr);
+      
+      // Handle invalid number input
+      if (isNaN(temp)) {
+        result.textContent = "Please enter a valid temperature.";
+        result.style.color = "red";
+        tempInput.setCustomValidity("Invalid input");
+        tempInput.reportValidity();
+        return;
+      }
+      
+      // Clear previous input error
+      tempInput.setCustomValidity("");
+      let converted;
+
+      // Skip conversion if same unit
+      if (from === to) {
+        converted = temp;
+      } else {
+        // Convert input to Celsius
+        if (from === "fahrenheit") temp = (temp - 32) * 5 / 9;
+        else if (from === "kelvin") temp -= 273.15;
+        
+        // Convert from Celsius to target unit
+        if (to === "fahrenheit") converted = temp * 9 / 5 + 32;
+        else if (to === "kelvin") converted = temp + 273.15;
+        else converted = temp;
+      }
+
+      // Unit symbols for display
+      const symbols = { celsius: "°C", fahrenheit: "°F", kelvin: "K" };
+      const output = `Result: ${converted.toFixed(2)} ${symbols[to]}`;
+      
+      // Display result with color depending on dark mode or not
+      result.textContent = output;
+      result.style.color = document.body.classList.contains("dark-mode") ? "#90ee90" : "teal";
+
+
+      // Add to history if not a duplicate of last entry
+      const lastEntry = historyList[0] || "";
+      const newEntry = `${tempStr} ${symbols[from]} → ${converted.toFixed(2)} ${symbols[to]}`;
+
+      // Only add to history if this exact input hasn't been added before (to avoid duplicates)
+      if (newEntry !== lastEntry) {
+        historyList.unshift(newEntry); // Add to start of array
+        if (historyList.length > 5) historyList.pop(); // Keep max 5 entries
+        
+        // Render history list items as <li>
+        historyEl.innerHTML = historyList.map(item => `<li>${item}</li>`).join('');
+      }
+    }
+
+    // Swap the "from" and "to" units
+    function swapValues() {
+      const from = document.getElementById("from");
+      const to = document.getElementById("to");
+      [from.value, to.value] = [to.value, from.value];
+      convertTemperature();
+    }
+
+    // Reset all fields and clear history
+    function resetFields() {
+      document.getElementById("temperature").value = "";
+      document.getElementById("from").value = "celsius";
+      document.getElementById("to").value = "kelvin";
+      document.getElementById("result").textContent = "";
+      document.getElementById("historyList").innerHTML = "";
+      historyList.length = 0; // Clear history array
+    }
+
+    // Event listeners for live conversion on input or change
+    document.getElementById("temperature").addEventListener("input", convertTemperatureDebounced);
+    document.getElementById("from").addEventListener("change", convertTemperature);
+    document.getElementById("to").addEventListener("change", convertTemperature);
+
+    
+    // Toggle between light and dark mode, update toggle button icon
+    function toggleDarkMode() {
+      document.body.classList.toggle("dark-mode");
+      const button = document.querySelector('.dark-mode-toggle');
+      button.textContent = document.body.classList.contains("dark-mode") ? "☀️" : "🌙";
+    }
+
+    // Trigger conversion on page load (does nothing if input is empty)
+    convertTemperature();
+  </script>
+</body>
+</html>
