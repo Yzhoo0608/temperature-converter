@@ -1,0 +1,201 @@
+<html>
+<head>
+  <title>Temperature Converter - Iteration 2: Add Kelvin conversion</title>
+    
+  <!--  CSS Styling -->
+  <style>
+
+    /* Define CSS variables for consistent styling */
+    :root {
+      --primary-color: #4a90e2;
+      --secondary-color: #ffffff;
+      --accent-color: #f0f4f8;
+      --text-color: #333;
+      --radius: 12px;
+      --shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Universal box-sizing rule for layout consistency */
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #f0f4f8, #d9e2ec);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    /* Card container for the converter UI */
+    .card {
+      background: var(--secondary-color);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 40px 30px;
+      max-width: 420px;
+      width: 100%;
+      transition: transform 0.3s ease;
+    }
+
+    /* Card hover effect */
+    .card:hover {
+      transform: translateY(-5px);
+    }
+
+    /* Header styling */
+    h2 {
+      margin-bottom: 24px;
+      color: var(--primary-color);
+      font-size: 26px;
+      text-align: center;
+    }
+
+    /* Form layout with vertical spacing */
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    label {
+      text-align: left;
+      font-weight: 600;
+      margin-top: 8px;
+    }
+
+    /* Add red asterisk to required fields */
+    .required::after {
+      content: " *";
+      color: red;
+      font-weight: bold;
+    }
+
+    /* Styling for inputs, dropdowns, and button */
+    input, select, button {
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: var(--radius);
+      font-size: 16px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    /* Focus highlight */
+    input:focus, select:focus {
+      border-color: var(--primary-color);
+    }
+
+    /* Button styling */
+    button {
+      background: var(--primary-color);
+      color: white;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+      transition: background 0.3s;
+      margin-top: 12px;
+    }
+
+    /* Button hover effect */
+    button:hover {
+      background: #357ABD;
+    }
+
+    /* Style for result display */
+    .result {
+      margin-top: 24px;
+      font-size: 18px;
+      color: var(--text-color);
+      font-weight: 600;
+      text-align: center;
+    }
+
+    /* Responsive padding for smaller screens */
+    @media (max-width: 500px) {
+      .card {
+        padding: 30px 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  
+  <!-- Temperature Converter Card -->
+  <div class="card">
+    <h2>🌡️ Temperature Converter</h2>
+    <form id="converterForm" method="POST">
+      <!-- Temperature input -->
+      <label for="temperature" class="required">Enter temperature:</label>
+      <input type="number" name="temperature" id="temperature" placeholder="e.g., 32" required>
+
+      <!-- From unit selection -->
+      <label for="fromUnit">Convert from:</label>
+      <select name="fromUnit" id="fromUnit" required>
+        <option value="C" selected>Celsius (°C)</option>
+        <option value="F">Fahrenheit (°F)</option>
+        <option value="K">Kelvin (K)</option>
+      </select>
+
+      <!-- To unit selection -->
+      <label for="toUnit">Convert to:</label>
+      <select name="toUnit" id="toUnit" required>
+        <option value="C">Celsius (°C)</option>
+        <option value="F">Fahrenheit (°F)</option>
+        <option value="K" selected>Kelvin (K)</option>
+      </select>
+
+      <!-- Submit button -->
+      <button type="submit">Convert</button>
+    </form>
+    <!-- Result will be displayed here -->
+    <div class="result" id="result"></div>
+  </div>
+
+  <!-- JavaScript to handle conversion logic -->
+  <script>
+
+    // Converts any input temperature to Celsius
+    function toCelsius(temp, unit) {
+      if (unit === "C") return temp;
+      if (unit === "F") return (temp - 32) * 5 / 9;
+      if (unit === "K") return temp - 273.15;
+    }
+
+    // Converts a Celsius temperature to the selected unit
+    function fromCelsius(temp, unit) {
+      if (unit === "C") return temp;
+      if (unit === "F") return (temp * 9 / 5) + 32;
+      if (unit === "K") return temp + 273.15;
+    }
+
+    // Event listener for form submission
+    document.getElementById("converterForm").addEventListener("submit", function(event) {
+      event.preventDefault(); // Prevent form from refreshing the page
+
+      // Get form values
+      const tempInput = parseFloat(document.getElementById("temperature").value);
+      const fromUnit = document.getElementById("fromUnit").value;
+      const toUnit = document.getElementById("toUnit").value;
+      const resultDiv = document.getElementById("result");
+     
+      // Validate input
+      if (isNaN(tempInput)) {
+        resultDiv.textContent = "❗ Please enter a valid number.";
+        return;
+      }
+
+      // Perform the conversion
+      const celsius = toCelsius(tempInput, fromUnit);
+      const converted = fromCelsius(celsius, toUnit);
+      
+      // Display the result with 2 decimal places
+      resultDiv.textContent = `${tempInput}°${fromUnit} = ${converted.toFixed(2)}°${toUnit}`;
+    });
+  </script>
+
+</body>
+</html>
