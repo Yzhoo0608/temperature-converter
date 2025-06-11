@@ -1,4 +1,4 @@
-# Interation 1 - Convert between Celsius and Fahrenheit Report
+# Iteration 1 - Convert between Celsius and Fahrenheit Report
 
 ## Description
 Iteration 1 lets the users convert temperatures between Celsius and Fahrenheit. It features a simple graphical user interface (GUI) where users can enter a temperature, select the unit to convert from and convert to via dropdown menus, and then click a convert button to see the results. It also has invalid input validation to ensure that only numeric values are accepted and prompting the user to issue an error message if invalid data is entered. 
