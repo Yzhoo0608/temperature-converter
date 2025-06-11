@@ -10,4 +10,4 @@ Iteration 1 lets the users convert temperatures between Celsius and Fahrenheit. 
   - Dropdown menus to select “from” and “to” units.
   - Click the Convert button to display the results. 
 - Input validation to accept only numeric values. 
-- Error messages for invalid inputs (e.g., letters or empty fields). 
+- Error messages for invalid inputs (e.g., letters or empty fields).
