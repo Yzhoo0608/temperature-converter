@@ -11,4 +11,4 @@ Iteration 2 introduces the new convert temperature unit, Kelvin, which expands t
 - Fahrenheit ↔ Kelvin 
 - GUI enhancements: 
 - Kelvin included dropdown options. 
-- Slight UI polishing for improved usability and readability. 
+- Slight UI polishing for improved usability and readability.
